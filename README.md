@@ -8,10 +8,34 @@ This repository serves as a demonstration and playground for **Human-AI Partners
 - **Multi-Agent Support**: Use multiple specialized agents to support human-led projects.
 - **Infrastructure**: Explore cross-node communication via Tailscale to enable collaboration anywhere.
 
+## 🛠 Tech Stack
+- **Frontend**: React + TypeScript + Tailwind CSS (Deployed on **Vercel**)
+- **Backend**: Python (FastAPI) (Containerized or Serverless)
+- **Database**: **Supabase** (PostgreSQL + Auth + RLS)
+- **VCS**: GitHub
+
 ## 🏗 Project Structure
-- `/patterns`: Documentation of Human-AI collaboration workflows (e.g., Pilot/Co-pilot, Reviewer/Creator).
-- `/demos`: Step-by-step collaboration scenarios.
-- `/scripts`: Automation scripts for setting up collaborative environments.
+- `/web`: React frontend.
+- `/api`: FastAPI backend.
+- `/patterns`: Documentation of Human-AI collaboration workflows.
+- `/docs`: Project documentation and guides.
+
+## 🚀 Getting Started
+### Frontend
+```bash
+cd web
+npm install
+npm run dev
+```
+
+### Backend
+```bash
+cd api
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+uvicorn main:app --reload
+```
 
 ## 🚀 Collaboration Patterns
 1. **Interactive Refinement**: Human provides a vision, Agent drafts, and they iterate together.
