@@ -19,8 +19,28 @@ interface Task {
 function App() {
   const [agents, setAgents] = useState<Agent[]>([]);
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [selectedTask, setSelectedTask] = useState<Task | null>(null);
-  const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+  const [intent, setIntent] = useState('');
+  const [isDispatching, setIsDispatching] = useState(false);
+
+  const handleDispatch = async () => {
+    if (!intent.trim()) return;
+    setIsDispatching(true);
+    try {
+      const response = await fetch(`${apiUrl}/tasks`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title: intent, status: 'pending' })
+      });
+      if (response.ok) {
+        setIntent('');
+        fetchData();
+      }
+    } catch (err) {
+      console.error("Failed to dispatch task", err);
+    } finally {
+      setIsDispatching(false);
+    }
+  };
 
   const fetchData = () => {
     // Fetch Agents
@@ -99,12 +119,19 @@ function App() {
             <div className="relative group">
               <input 
                 type="text" 
+                value={intent}
+                onChange={(e) => setIntent(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleDispatch()}
                 placeholder="Enter new intent..."
                 className="w-full bg-black/40 border border-gray-700 group-hover:border-gray-600 rounded-xl p-4 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all mb-4 text-white"
               />
             </div>
-            <button className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-4 rounded-xl transition-all shadow-lg shadow-blue-900/20 active:scale-[0.98]">
-              Dispatch Request
+            <button 
+              onClick={handleDispatch}
+              disabled={isDispatching}
+              className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-4 rounded-xl transition-all shadow-lg shadow-blue-900/20 active:scale-[0.98] disabled:opacity-50"
+            >
+              {isDispatching ? 'Dispatching...' : 'Dispatch Request'}
             </button>
           </section>
         </div>
