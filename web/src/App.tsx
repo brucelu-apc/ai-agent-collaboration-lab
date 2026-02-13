@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import ReactMarkdown from 'react-markdown'
 
 interface Agent {
   id: string;
@@ -133,10 +134,10 @@ function App() {
           {selectedTask ? (
             <div className="flex-1 overflow-auto">
               <h3 className="text-blue-300 font-bold mb-2">{selectedTask.title}</h3>
-              <div className="bg-gray-900 p-4 rounded-lg border border-gray-700 min-h-[200px]">
+              <div className="bg-gray-900 p-6 rounded-lg border border-gray-700 min-h-[400px]">
                 {selectedTask.result ? (
-                  <div className="text-sm text-gray-300 whitespace-pre-wrap leading-relaxed">
-                    {typeof selectedTask.result === 'string' ? selectedTask.result : JSON.stringify(selectedTask.result, null, 2)}
+                  <div className="prose prose-invert prose-blue max-w-none">
+                    <ReactMarkdown>{selectedTask.result}</ReactMarkdown>
                   </div>
                 ) : (
                   <div className="flex flex-col items-center justify-center h-full text-gray-600">
