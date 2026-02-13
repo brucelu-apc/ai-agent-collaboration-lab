@@ -8,6 +8,7 @@ def main():
     parser = argparse.ArgumentParser(description="Record a task to Supabase from Telegram.")
     parser.add_argument("--title", required=True, help="Task title")
     parser.add_argument("--status", default="running", help="Task status")
+    parser.add_argument("--result", help="Task result content")
     
     args = parser.parse_args()
 
@@ -33,7 +34,8 @@ def main():
             "title": args.title,
             "status": args.status,
             "assigned_to": agent_id,
-            "created_by": "human (telegram)"
+            "created_by": "human (telegram)",
+            "result": args.result
         }
         
         supabase.table("tasks").insert(data).execute()
