@@ -35,7 +35,7 @@ def main():
             "status": args.status,
             "assigned_to": agent_id,
             "created_by": "human (telegram)",
-            "result": args.result
+            "result": args.result.encode('utf-8').decode('unicode_escape') if args.result else None
         }
         
         supabase.table("tasks").insert(data).execute()
