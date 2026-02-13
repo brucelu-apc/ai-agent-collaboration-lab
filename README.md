@@ -14,6 +14,23 @@ This repository serves as a demonstration and playground for **Human-AI Partners
 - **Database**: **Supabase** (PostgreSQL + Auth + RLS)
 - **VCS**: GitHub
 
+## 🚀 Deployment
+
+### Frontend (Vercel)
+1. Link your GitHub repo to **Vercel**.
+2. Set **Root Directory** to `web`.
+3. Configure Environment Variables:
+   - `VITE_API_URL`: Your deployed backend URL (e.g., `https://your-api.railway.app`).
+4. Build Command: `npm run build`.
+5. Output Directory: `dist`.
+
+### Backend (Python)
+You can deploy the FastAPI backend to platforms like **Railway**, **Render**, or **DigitalOcean**.
+1. Set Environment Variables:
+   - `SUPABASE_URL`: Your Supabase URL.
+   - `SUPABASE_SERVICE_ROLE_KEY`: Your Supabase Service Role Key.
+2. The `api/` folder contains the `requirements.txt` and `main.py` needed for deployment.
+
 ## 🏗 Project Structure
 - `/web`: React frontend.
 - `/api`: FastAPI backend.

@@ -10,8 +10,10 @@ function App() {
   const [agents, setAgents] = useState<Agent[]>([]);
 
   useEffect(() => {
-    // Placeholder for fetching data from FastAPI
-    fetch('http://localhost:8000/agents/status')
+    // Use VITE_API_URL from env, fallback to localhost for development
+    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+    
+    fetch(`${apiUrl}/agents/status`)
       .then(res => res.json())
       .then(data => setAgents(data.agents))
       .catch(err => console.error("Failed to fetch agents", err));
