@@ -24,12 +24,17 @@ This repository serves as a demonstration and playground for **Human-AI Partners
 4. Build Command: `npm run build`.
 5. Output Directory: `dist`.
 
-### Backend (Python)
-You can deploy the FastAPI backend to platforms like **Railway**, **Render**, or **DigitalOcean**.
-1. Set Environment Variables:
+### Backend (Railway)
+1. Link your GitHub repo to **Railway**.
+2. Create a new Service from the repo.
+3. **Key Settings**:
+   - **Root Directory**: Set to **`api`**.
+   - **Build Command**: (Auto-detected, usually `pip install -r requirements.txt`).
+   - **Start Command**: `uvicorn main:app --host 0.0.0.0 --port $PORT`.
+4. Configure Environment Variables:
    - `SUPABASE_URL`: Your Supabase URL.
    - `SUPABASE_SERVICE_ROLE_KEY`: Your Supabase Service Role Key.
-2. The `api/` folder contains the `requirements.txt` and `main.py` needed for deployment.
+   - `PORT`: 8000 (Railway will override this automatically).
 
 ## 🏗 Project Structure
 - `/web`: React frontend.
