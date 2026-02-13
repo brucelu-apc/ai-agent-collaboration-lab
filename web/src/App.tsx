@@ -161,8 +161,8 @@ function App() {
               </div>
               <div className="bg-black/30 p-8 rounded-2xl border border-gray-800/50 min-h-[400px] shadow-inner">
                 {selectedTask.result ? (
-                  <div className="prose prose-invert prose-blue max-w-none prose-img:rounded-xl prose-img:shadow-2xl prose-a:text-blue-400 prose-headings:text-white">
-                    <ReactMarkdown>{selectedTask.result.replace(/\\n/g, '\n')}</ReactMarkdown>
+                  <div className="prose prose-invert prose-blue max-w-none prose-pre:bg-gray-800 prose-pre:border prose-pre:border-gray-700">
+                    <ReactMarkdown>{selectedTask.result}</ReactMarkdown>
                   </div>
                 ) : (
                   <div className="flex flex-col items-center justify-center h-full py-20 text-gray-600">
