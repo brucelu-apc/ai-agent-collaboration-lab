@@ -40,14 +40,16 @@ async def get_agents_status():
         return {"agents": response.data}
     except Exception as e:
         print(f"ERROR: {e}")
-        # Fallback to hardcoded for UI testing if table doesn't exist yet
-        return {
-            "error": str(e),
-            "agents": [
-                {"id": "dango-1", "name": "小糰子1號 (Fallback)", "status": "online"},
-                {"id": "dango-2", "name": "小糰子2號 (Fallback)", "status": "online"}
-            ]
-        }
+        return {"error": str(e), "agents": []}
+
+@app.get("/tasks")
+async def get_tasks():
+    try:
+        response = supabase.table("tasks").select("*").order("created_at", desc=True).limit(10).execute()
+        return {"tasks": response.data}
+    except Exception as e:
+        print(f"ERROR: {e}")
+        return {"error": str(e), "tasks": []}
 
 if __name__ == "__main__":
     import uvicorn

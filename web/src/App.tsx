@@ -6,17 +6,36 @@ interface Agent {
   status: string;
 }
 
+interface Task {
+  id: string;
+  title: string;
+  status: string;
+  created_at: string;
+}
+
 function App() {
   const [agents, setAgents] = useState<Agent[]>([]);
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
-  useEffect(() => {
-    // Use VITE_API_URL from env, fallback to localhost for development
-    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
-    
+  const fetchData = () => {
+    // Fetch Agents
     fetch(`${apiUrl}/agents/status`)
       .then(res => res.json())
-      .then(data => setAgents(data.agents))
+      .then(data => setAgents(data.agents || []))
       .catch(err => console.error("Failed to fetch agents", err));
+
+    // Fetch Tasks
+    fetch(`${apiUrl}/tasks`)
+      .then(res => res.json())
+      .then(data => setTasks(data.tasks || []))
+      .catch(err => console.error("Failed to fetch tasks", err));
+  };
+
+  useEffect(() => {
+    fetchData();
+    const interval = setInterval(fetchData, 5000); // Poll every 5s
+    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -49,8 +68,27 @@ function App() {
           <h2 className="text-xl font-semibold mb-4 flex items-center">
             <span className="mr-2">📋</span> Recent Collaboration Tasks
           </h2>
-          <div className="text-sm text-gray-400 italic">
-            Connecting to project history...
+          <div className="space-y-3">
+            {tasks.length > 0 ? tasks.map(task => (
+              <div key={task.id} className="bg-gray-700/50 p-3 rounded-lg border border-gray-600">
+                <div className="flex justify-between items-start mb-1">
+                  <span className="font-medium text-blue-300">{task.title}</span>
+                  <span className={`text-[10px] uppercase px-1.5 py-0.5 rounded ${
+                    task.status === 'completed' ? 'bg-green-500/20 text-green-400' : 
+                    task.status === 'running' ? 'bg-yellow-500/20 text-yellow-400' : 'bg-gray-500/20 text-gray-400'
+                  }`}>
+                    {task.status}
+                  </span>
+                </div>
+                <div className="text-[10px] text-gray-500">
+                  {new Date(task.created_at).toLocaleString()}
+                </div>
+              </div>
+            )) : (
+              <div className="text-sm text-gray-400 italic">
+                Waiting for instructions from Telegram...
+              </div>
+            )}
           </div>
         </section>
 
