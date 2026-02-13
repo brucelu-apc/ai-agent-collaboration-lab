@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 
 interface Agent {
   id: string;
@@ -161,8 +162,8 @@ function App() {
               </div>
               <div className="bg-black/30 p-8 rounded-2xl border border-gray-800/50 min-h-[400px] shadow-inner">
                 {selectedTask.result ? (
-                  <div className="prose prose-invert prose-blue max-w-none prose-pre:bg-gray-800 prose-pre:border prose-pre:border-gray-700">
-                    <ReactMarkdown>{selectedTask.result}</ReactMarkdown>
+                  <div className="prose prose-invert prose-blue max-w-none prose-pre:bg-gray-800 prose-pre:border prose-pre:border-gray-700 prose-img:mx-auto prose-img:max-h-[300px]">
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>{selectedTask.result}</ReactMarkdown>
                   </div>
                 ) : (
                   <div className="flex flex-col items-center justify-center h-full py-20 text-gray-600">
