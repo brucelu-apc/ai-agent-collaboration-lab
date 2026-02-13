@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import os
 from dotenv import load_dotenv
-from supabase import create_client, Client
+from supabase import create_client, Client, ClientOptions
 
 load_dotenv()
 
@@ -20,7 +20,8 @@ app.add_middleware(
 # Supabase Setup
 url: str = os.environ.get("SUPABASE_URL")
 key: str = os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
-supabase: Client = create_client(url, key)
+# Use 'ai_agent_lab' schema for isolation
+supabase: Client = create_client(url, key, options=ClientOptions(schema="ai_agent_lab"))
 
 @app.get("/")
 async def root():
@@ -28,14 +29,18 @@ async def root():
 
 @app.get("/agents/status")
 async def get_agents_status():
-    # Placeholder for fetching agent status from DB or local state
-    return {
-        "agents": [
-            {"id": "dango-1", "name": "小糰子1號", "status": "online"},
-            {"id": "dango-2", "name": "小糰子2號", "status": "online"},
-            {"id": "dango-3", "name": "小糰子3號", "status": "online"}
-        ]
-    }
+    try:
+        response = supabase.table("agents").select("*").execute()
+        return {"agents": response.data}
+    except Exception as e:
+        # Fallback to hardcoded for UI testing if table doesn't exist yet
+        return {
+            "error": str(e),
+            "agents": [
+                {"id": "dango-1", "name": "小糰子1號 (Fallback)", "status": "online"},
+                {"id": "dango-2", "name": "小糰子2號 (Fallback)", "status": "online"}
+            ]
+        }
 
 if __name__ == "__main__":
     import uvicorn
